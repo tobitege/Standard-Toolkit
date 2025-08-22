@@ -48,4 +48,4 @@ jobs:
         run: dotnet restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
 
       - name: Build
-        run: dotnet build "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln" -c Release
+        run: dotnet msbuild "Scripts/nightly.proj" -t:Rebuild -v:m -p:ContinuousIntegrationBuild=true
