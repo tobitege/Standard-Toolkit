@@ -38,14 +38,12 @@ jobs:
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
-        with:
-          msbuild-architecture: ${{ matrix.arch }}
 
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.2.0
 
-      - name: Restore
-        run: dotnet restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
+      - name: Restore Packages
+        run: nuget restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
 
-      - name: Build
+      - name: Build Solution
         run: msbuild "Scripts/nightly.proj" /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU"
