@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        arch: [x86, x64]
+        arch: [x64]
 
     steps:
       - name: Checkout
