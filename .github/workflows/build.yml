@@ -48,8 +48,8 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.2.0
 
-      - name: Restore Packages
-        run: nuget restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
+      - name: Restore
+        run: dotnet restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
 
-      - name: Build Solution
-        run: msbuild.exe "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln" /p:Platform="${{ matrix.arch }}" /p:Configuration="Release"
+      - name: Build (x86/x64 per Matrix)
+        run: dotnet build "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln" -c Release /p:Platform="${{ matrix.arch }}"
