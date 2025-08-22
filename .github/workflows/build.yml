@@ -36,14 +36,30 @@ jobs:
           dotnet-version: 10.0.x
           dotnet-quality: preview
 
+      # global.json dynamisch erzeugen
+      - name: Force .NET 10 SDK via global.json
+        run: |
+          $sdkVersion = (dotnet --list-sdks | Select-String "10.0").ToString().Split(" ")[0]
+          Write-Output "Using SDK $sdkVersion"
+          @"
+          {
+            "sdk": {
+              "version": "$sdkVersion",
+              "rollForward": "latestFeature"
+            }
+          }
+          "@ | Out-File -Encoding utf8 global.json
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
 
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.2.0
 
-      - name: Restore Packages
-        run: nuget restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
+      - name: Restore
+        run: dotnet restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
 
-      - name: Build Solution
+      - name: Build
         run: msbuild "Scripts/nightly.proj" /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU"
