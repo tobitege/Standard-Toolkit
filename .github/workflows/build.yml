@@ -1,0 +1,39 @@
+﻿name: Build
+
+on:
+    pull_request:
+        branches:
+            - '**'
+        types:
+            - opened
+            - synchronize
+            - reopened
+    push:
+        branches:
+            - '**'
+        paths-ignore:
+            - '.git*'
+            - '.vscode'
+
+jobs:
+    build:
+        runs-on: windows-2022
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+
+            - name: Setup MSBuild
+              uses: microsoft/setup-msbuild@v1
+
+            - name: Setup NuGet
+              uses: NuGet/setup-nuget@v1.0.6
+
+            - name: Restore Packages
+              run: nuget restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.slnx"
+
+            - name: Build Solution
+              run: msbuild.exe "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.slnx" /p:platform="Any CPU" /p:configuration="Release"
+# End of workflow
