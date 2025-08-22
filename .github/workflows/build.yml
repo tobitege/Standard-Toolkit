@@ -5,7 +5,13 @@ on:
     branches: ['**']
     types: [opened, synchronize, reopened]
   push:
-    branches: ['**']
+    branches:
+      - master
+      - alpha
+      - canary
+      - gold
+      - V95
+      - V85-LTS
     paths-ignore: ['.git*', '.vscode']
 
 jobs:
