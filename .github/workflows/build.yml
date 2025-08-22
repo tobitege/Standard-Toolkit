@@ -1,4 +1,4 @@
-﻿name: Build
+name: Build
 
 on:
     pull_request:
@@ -25,6 +25,15 @@ jobs:
               with:
                   ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
 
+            - name: Setup .NET SDKs
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: |
+                      8.0.x
+                      9.0.x
+                      10.0.x
+                  include-prerelease: true
+
             - name: Setup MSBuild
               uses: microsoft/setup-msbuild@v1
 
@@ -32,8 +41,8 @@ jobs:
               uses: NuGet/setup-nuget@v1.0.6
 
             - name: Restore Packages
-              run: nuget restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln"
+              run: nuget restore "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.slnx"
 
             - name: Build Solution
-              run: msbuild.exe "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.sln" /p:platform="Any CPU" /p:configuration="Release"
+              run: msbuild.exe "Source/Krypton Components/Krypton Toolkit Suite 2022 - VS2022.slnx" /p:platform="Any CPU" /p:configuration="Release"
 # End of workflow
